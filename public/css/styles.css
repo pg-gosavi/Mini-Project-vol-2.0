@@ -1,0 +1,11 @@
+.secure {
+    background-color: #d4edda;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.insecure {
+    background-color: #f8d7da;
+    padding: 10px;
+    margin: 10px 0;
+}

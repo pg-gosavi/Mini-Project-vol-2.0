@@ -1,0 +1,96 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Demo Site</title>
+    <style>
+        .secure { background-color: #d4edda; padding: 10px; margin: 10px 0; }
+        .insecure { background-color: #f8d7da; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Web Security Demonstration</h1>
+    
+    <div class="secure">
+        <h2>Secure Registration Form</h2>
+        <form id="secureRegister">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" required minlength="3">
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required minlength="8">
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div class="secure">
+        <h2>Secure Payment Form</h2>
+        <form id="securePayment">
+            <div>
+                <label for="cardNumber">Card Number:</label>
+                <input type="text" id="cardNumber" required pattern="\d{16}">
+            </div>
+            <div>
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" required pattern="\d{3,4}">
+            </div>
+            <div>
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" required min="0">
+            </div>
+            <button type="submit">Pay</button>
+        </form>
+    </div>
+
+    <script>
+        // Secure form handling
+        document.getElementById('secureRegister').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                alert(data.message || data.error);
+            } catch (error) {
+                alert('Error during registration');
+            }
+        });
+
+        document.getElementById('securePayment').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cvv = document.getElementById('cvv').value;
+            const amount = document.getElementById('amount').value;
+            
+            try {
+                const response = await fetch('/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cardNumber, cvv, amount })
+                });
+                
+                const data = await response.json();
+                alert(data.message || data.error);
+            } catch (error) {
+                alert('Error processing payment');
+            }
+        });
+    </script>
+</body>
+</html>
